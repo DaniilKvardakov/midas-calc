@@ -177,4 +177,8 @@ docs/_book
 # TODO: where does this rule come from?
 test/
 
+frontend/.vscode
+frontend/.idea
+backend/.idea
+
 # End of https://www.toptal.com/developers/gitignore/api/vue,node,java
