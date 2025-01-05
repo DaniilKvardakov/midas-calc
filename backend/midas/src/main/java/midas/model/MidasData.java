@@ -10,6 +10,11 @@ public class MidasData {
     private Duration timeOfSellMidas;
     private int failMidasCast;
 
+    public MidasData(Duration totalTimeOfMatch, Duration midasTime) {
+        this.totalTimeOfMatch = totalTimeOfMatch;
+        this.midasTime = midasTime;
+    }
+
     public Duration getTotalTimeOfMatch() {
         return totalTimeOfMatch;
     }

@@ -1,5 +1,6 @@
 package midas.util;
 
+import lombok.extern.slf4j.Slf4j;
 import midas.model.MidasData;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,21 +11,24 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.Duration;
 
 @Component
+@Slf4j
 @PropertySource("classpath:midas.properties")
 public class CalcFarmUtil {
 
     @Value("${midas.cooldown}")
-    private int cooldown;
+    private int cooldown = 110;
     @Value("${midas.sale.price}")
-    private int salePrice;
+    private int salePrice = 1100;
     @Value("${midas.given.money}")
-    private int givenMoney;
-    @Value("${dota.api.uri}")
-    private String dotaApiUri;
+    private int givenMoney = 160;
+    @Value("${midas.dotabuff.url.first}")
+    private String firstHalfSecond = "https://ru.dotabuff.com/matches/";
+    @Value("${midas.dotabuff.url.second}")
+    private String secondHalfURL = "/builds";
 
     public int getFarmByMidasData(MidasData midasData) {
         if (midasData.getTimeOfSellMidas() == null)
@@ -42,16 +46,48 @@ public class CalcFarmUtil {
 
     }
 
-    public int getFarmById() throws IOException {
-        Document dotabuffPage = Jsoup.parse(new URL("https://ru.dotabuff.com/matches/8113747033/builds"), 3000);
+    public int getFarmById(String nick, long matchId) throws IOException {
+
+        Document dotabuffPage = Jsoup.parse(new URL(firstHalfSecond + matchId + secondHalfURL), 3000);
         Elements elements = dotabuffPage.select("header[class=header no-padding]");
-        Element necessaryElement;
+        Element necessaryMidasElement = null;
+
         for (Element element : elements) {
-            System.out.println(element);
-            if (element.toString().contains("<a href=\"/items/power") && element.toString().contains("mode:sasal/bolt"))
-                necessaryElement = element;
+
+            if (element.toString().contains("<a href=\"/items/hand-of-midas") && element.toString().contains(nick))
+                necessaryMidasElement = element;
+
         }
-        return 1;
+
+        String[] midasTimeByRawData = (
+                (Element) (
+                        necessaryMidasElement
+                                .select("a[href=/items/hand-of-midas]")
+                                .getFirst()
+                                .parent()
+                )
+                        .nextSibling()
+        )
+                .text()
+                .split(":");
+
+
+
+        String[] totalTimeByRawData = dotabuffPage
+                .select("span[class=duration]")
+                .getFirst()
+                .text()
+                .split(":");
+
+
+        Duration midasTime = Duration.ofMinutes(Long.parseLong(midasTimeByRawData[0])).plusSeconds(Long.parseLong(midasTimeByRawData[1]));
+        Duration totalTime = Duration.ofMinutes(Long.parseLong(totalTimeByRawData[0])).plusSeconds(Long.parseLong(totalTimeByRawData[1]));
+
+        log.info(String.valueOf(totalTime));
+        log.info(String.valueOf(midasTime));
+
+        return getFarmByMidasData(new MidasData(totalTime, midasTime));
+
     }
 
 }
