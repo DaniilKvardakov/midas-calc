@@ -45,9 +45,12 @@ public class CalcFarmUtil {
     public int getFarmById() throws IOException {
         Document dotabuffPage = Jsoup.parse(new URL("https://ru.dotabuff.com/matches/8113747033/builds"), 3000);
         Elements elements = dotabuffPage.select("header[class=header no-padding]");
-         for (Element element : elements) {
-             System.out.println(element.text());
-         }
+        Element necessaryElement;
+        for (Element element : elements) {
+            System.out.println(element);
+            if (element.toString().contains("<a href=\"/items/power") && element.toString().contains("mode:sasal/bolt"))
+                necessaryElement = element;
+        }
         return 1;
     }
 
