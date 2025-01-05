@@ -9,10 +9,6 @@ const submitHandler = () => calcStore.sendCalcForm();
 
 <template>
  <div :class="$style.Main">
-
-   <p style="color: white; position: relative; z-index: 100;">
-     {{ calcStore }}
-   </p>
      <div :class="$style.MainCover"></div>
      <Title type="h1" :style="{margin: ' 0 0 0.17em'}">Калькулятор Мидаса</Title>
      <Title type="h2" :style="{margin: ' 0 0 0.97em'}">Крутейший в мире подзаголовок</Title>
