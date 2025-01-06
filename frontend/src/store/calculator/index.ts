@@ -27,10 +27,15 @@ export const useCalcStore = defineStore('calculator', () => {
     }
 
     const sendCalcForm = async () => {
-            const requestUrl = isShowInputs.value ? "/byData" : `/byId/${formData.value.matchId}`;
+            const baseUrl = 'http://176.212.127.212:8888';
+            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/Boy Next Door`;
 
             const config = {
-                method: isShowInputs.value ? "POST" : "GET",
+                header: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                mode: 'no-cors',
+                method: isShowInputs.value ? "GET" : "GET",
             }
 
             if(isShowInputs.value) {
@@ -38,7 +43,7 @@ export const useCalcStore = defineStore('calculator', () => {
             }
 
             try {
-                const response = await fetch(requestUrl, config);
+                const response = await fetch(baseUrl + '/test', config);
                 console.log('Возвращаем новые данные')
             } catch(e) {
                 console.error(e);

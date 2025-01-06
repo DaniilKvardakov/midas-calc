@@ -9,7 +9,7 @@ export default defineConfig(({mode}) => {
       server: {
         proxy: {
           "/api": {
-            target: 'https://ru.dotabuff.com/players/425890796',
+            target: 'http://176.212.127.212:8888',
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ''),
           },
