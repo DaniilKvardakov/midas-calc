@@ -31,6 +31,7 @@
 		<java.version>21</java.version>
 		<json.version>20241224</json.version>
 		<jsop.version>1.14.3</jsop.version>
+		<model-mapper.version>3.2.1</model-mapper.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -98,6 +99,11 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>2.0.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${model-mapper.version}</version>
 		</dependency>
 	</dependencies>
 

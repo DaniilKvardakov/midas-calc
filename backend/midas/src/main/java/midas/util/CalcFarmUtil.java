@@ -1,7 +1,9 @@
 package midas.util;
 
 import lombok.extern.slf4j.Slf4j;
+import midas.response.Status;
 import midas.model.MidasData;
+import midas.response.MidasResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,8 +15,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Objects;
 
 @Component
@@ -40,39 +42,36 @@ public class CalcFarmUtil {
     private String iconClass;
     @Value("${midas.duration.span}")
     private String span;
+    @Value("${midas.dotabuff.timeout}")
+    private int timeout;
 
-    public int getFarmByMidasData(MidasData midasData) {
+    public Map<Status, MidasResponse> getFarmByMidasData(MidasData midasData) {
 
         // Если не клиент не отправил время продажи мидаса, то будем считать что он был у него весь матч.
         if (midasData.getTimeOfSellMidas() == null)
             midasData.setTimeOfSellMidas(midasData.getTotalTimeOfMatch());
 
-        // ( ( Время длительности матча - время покупки мидаса ) / кулдаун мидаса ) * награда с использования мидаса
-        int result = (int) ((midasData.getTotalTimeOfMatch().minus(midasData.getMidasTime()).getSeconds() / cooldown) * givenMoney);
+        // ( ( Время длительности матча - время покупки мидаса - потерянное время ) / кулдаун мидаса ) * награда с использования мидаса
+        int result = (int) ((midasData.getTotalTimeOfMatch().minus(midasData.getMidasTime()).minus(midasData.getWastedTime()).getSeconds() / cooldown) * givenMoney);
+        int resultBufferBeforeSale = result;
 
         // Если клиент отправил тайминг продажи, то к прибыли от мидаса прибавляем бабки от его продажи.
-        if (!midasData.getTotalTimeOfMatch().equals(midasData.getTimeOfSellMidas())) result += salePrice;
+        if (!midasData.getTotalTimeOfMatch().equals(midasData.getTimeOfSellMidas()))
+            result += salePrice;
 
-        if (midasData.getFailMidasCast() > 0) result -= givenMoney * midasData.getFailMidasCast();
-
-        return result;
+        return Map.of(Status.NO_ERRORS, new MidasResponse(resultBufferBeforeSale, result == resultBufferBeforeSale ? 0 : result));
 
     }
 
-    public Integer getFarmById(String nick, long matchId) {
-
-        System.out.println("nick: |" + nick + "|");
-        System.out.println("matchId: |" + matchId + "|");
+    public Map<Status, MidasResponse> getFarmById(String nick, long matchId) {
 
         Document dotabuffPage;
         try {
-            URL dotabuffURL = new URL(firstHalfSecond + matchId + secondHalfURL);
-            dotabuffPage = Jsoup.parse(dotabuffURL, 3000);
-        } catch (IOException e) {
-            System.out.println("URL error!");
-            return null;
+            URI dotabuffURL = new URI(firstHalfSecond + matchId + secondHalfURL);
+            dotabuffPage = Jsoup.parse(dotabuffURL.toURL(), timeout);
+        } catch (IOException | URISyntaxException e) {
+            return Map.of(Status.DOTABUFF_URL_ERROR, MidasResponse.BAD_MIDAS_RESPONSE);
         }
-        System.out.println("doc good!");
 
         Elements elements = dotabuffPage.select(teamTable); // Ищем "div" с референсом team_table.png
         Element necessaryMidasElement = null;
@@ -96,10 +95,7 @@ public class CalcFarmUtil {
                     .split(":");
 
         } catch (NullPointerException n) {
-            System.out.println("Element not found!");
-            n.printStackTrace();
-            System.out.println(n.getMessage());
-            return null;
+            return Map.of(Status.PARSE_ERROR, MidasResponse.BAD_MIDAS_RESPONSE);
         }
 
 
@@ -114,11 +110,7 @@ public class CalcFarmUtil {
         Duration midasTime = Duration.ofMinutes(Long.parseLong(midasTimeByRawData[0])).plusSeconds(Long.parseLong(midasTimeByRawData[1]));
         Duration totalTime = Duration.ofMinutes(Long.parseLong(totalTimeByRawData[0])).plusSeconds(Long.parseLong(totalTimeByRawData[1]));
 
-        System.out.println(midasTime);
-        System.out.println(totalTime);
-
-
-        return getFarmByMidasData(new MidasData(totalTime, midasTime));
+        return getFarmByMidasData(new MidasData(totalTime, midasTime, Duration.ZERO, Duration.ZERO));
 
     }
 
