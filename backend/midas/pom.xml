@@ -32,6 +32,8 @@
 		<json.version>20241224</json.version>
 		<jsop.version>1.14.3</jsop.version>
 		<model-mapper.version>3.2.1</model-mapper.version>
+		<spring.doc.version>2.6.0</spring.doc.version>
+		<web.flux.version>2.6.0</web.flux.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -104,6 +106,16 @@
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>${model-mapper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${spring.doc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+			<version>${web.flux.version}</version>
 		</dependency>
 	</dependencies>
 

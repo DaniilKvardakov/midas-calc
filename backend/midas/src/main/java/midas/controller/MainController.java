@@ -6,7 +6,9 @@ import midas.response.MidasResponse;
 import midas.util.CalcFarmUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +16,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
 
 
 @RestController("/midas/api")
+@PropertySource("classpath:redirect.properties")
 public class MainController {
 
+    @Value("${url.swagger}")
+    private String swaggerURL;
     private final CalcFarmUtil calcFarmUtil;
 
     @Autowired
     public MainController(CalcFarmUtil calcFarmUtil) {
         this.calcFarmUtil = calcFarmUtil;
+    }
+
+    @GetMapping("/swagger")
+    public RedirectView swagger() {
+        return new RedirectView(swaggerURL);
     }
 
     @GetMapping("/profit/{id}/{nick}")
