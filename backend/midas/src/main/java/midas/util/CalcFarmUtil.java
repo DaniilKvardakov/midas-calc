@@ -23,11 +23,11 @@ import java.util.Objects;
 public class CalcFarmUtil {
 
     @Value("${midas.cooldown}")
-    private int cooldown = 110;
+    private int cooldown;
     @Value("${midas.sale.price}")
-    private int salePrice = 1100;
+    private int salePrice;
     @Value("${midas.given.money}")
-    private int givenMoney = 160;
+    private int givenMoney;
     @Value("${midas.dotabuff.url.first}")
     private String firstHalfSecond;
     @Value("${midas.dotabuff.url.second}")
