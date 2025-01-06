@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController("/get")
+@RestController("/midas/api")
 public class MainController {
 
     private final CalcFarmUtil calcFarmUtil;
@@ -22,14 +22,22 @@ public class MainController {
         this.calcFarmUtil = calcFarmUtil;
     }
 
-    @GetMapping("/byId/{id}")
-    public ResponseEntity<Integer> getById(@PathVariable int id) {
+    @GetMapping("/get/byId/{id}/{nick}")
+    public ResponseEntity<Integer> getById(@PathVariable long id, @PathVariable String nick) {
 
-        return null;
+        Integer result = calcFarmUtil.getFarmById(nick, id);
+        if (result == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/byData")
     public ResponseEntity<Integer> getByData(@RequestBody MidasData midasData){
-        return new ResponseEntity<>(calcFarmUtil.getFarmByMidasData(midasData), HttpStatus.OK);
+
+        Integer result = calcFarmUtil.getFarmByMidasData(midasData);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

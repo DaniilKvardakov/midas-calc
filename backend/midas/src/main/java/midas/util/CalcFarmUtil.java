@@ -11,8 +11,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -29,62 +32,91 @@ public class CalcFarmUtil {
     private String firstHalfSecond = "https://ru.dotabuff.com/matches/";
     @Value("${midas.dotabuff.url.second}")
     private String secondHalfURL = "/builds";
+    @Value("${midas.tag.team.table}")
+    private String teamTable = "header[class=header no-padding]";
+    @Value("${midas.icon.a}")
+    private String icon = "<a href=\"/items/hand-of-midas";
+    @Value("${midas.icon.class}")
+    private String iconClass = "a[href=/items/hand-of-midas]";
+    @Value("${midas.duration.span}")
+    private String span = "span[class=duration]";
 
     public int getFarmByMidasData(MidasData midasData) {
+
+        // Если не клиент не отправил время продажи мидаса, то будем считать что он был у него весь матч.
         if (midasData.getTimeOfSellMidas() == null)
             midasData.setTimeOfSellMidas(midasData.getTotalTimeOfMatch());
 
+        // ( ( Время длительности матча - время покупки мидаса ) / кулдаун мидаса ) * награда с использования мидаса
         int result = (int) ((midasData.getTotalTimeOfMatch().minus(midasData.getMidasTime()).getSeconds() / cooldown) * givenMoney);
 
-        if (midasData.getTotalTimeOfMatch().equals(midasData.getTimeOfSellMidas()))
-            result += salePrice;
+        // Если клиент отправил тайминг продажи, то к прибыли от мидаса прибавляем бабки от его продажи.
+        if (!midasData.getTotalTimeOfMatch().equals(midasData.getTimeOfSellMidas())) result += salePrice;
 
-        if (midasData.getFailMidasCast() > 0)
-            result -= givenMoney * midasData.getFailMidasCast();
+        if (midasData.getFailMidasCast() > 0) result -= givenMoney * midasData.getFailMidasCast();
 
         return result;
 
     }
 
-    public int getFarmById(String nick, long matchId) throws IOException {
+    public Integer getFarmById(String nick, long matchId) {
 
-        Document dotabuffPage = Jsoup.parse(new URL(firstHalfSecond + matchId + secondHalfURL), 3000);
-        Elements elements = dotabuffPage.select("header[class=header no-padding]");
+        System.out.println("nick: |" + nick + "|");
+        System.out.println("matchId: |" + matchId + "|");
+
+        Document dotabuffPage;
+        try {
+            URL dotabuffURL = new URL(firstHalfSecond + matchId + secondHalfURL);
+            dotabuffPage = Jsoup.parse(dotabuffURL, 3000);
+        } catch (IOException e) {
+            System.out.println("URL error!");
+            return null;
+        }
+        System.out.println("doc good!");
+
+        Elements elements = dotabuffPage.select(teamTable); // Ищем "div" с референсом team_table.png
         Element necessaryMidasElement = null;
 
         for (Element element : elements) {
-
-            if (element.toString().contains("<a href=\"/items/hand-of-midas") && element.toString().contains(nick))
+            // Если есть элемент c референсом icon_midas_a.png содержащий иконку мидаса и текст с именем игрока, то выкарчёвываем этот элемент.
+            if (element.toString().contains(icon) && element.toString().contains(nick))
                 necessaryMidasElement = element;
-
         }
 
-        String[] midasTimeByRawData = (
-                (Element) (
-                        necessaryMidasElement
-                                .select("a[href=/items/hand-of-midas]")
-                                .getFirst()
-                                .parent()
-                )
-                        .nextSibling()
-        )
-                .text()
-                .split(":");
 
+        String[] midasTimeByRawData;
+        try {
+
+            midasTimeByRawData = ((Element) Objects.requireNonNull((Objects.requireNonNull(Objects.requireNonNull(necessaryMidasElement)
+                    .select(iconClass) // Тут просто выражение для поиска ССЫЛКИ(тег <a>) на иконку мидаса.
+                    .getFirst()
+                    .parent()))
+                    .nextSibling()))
+                    .text()
+                    .split(":");
+
+        } catch (NullPointerException n) {
+            System.out.println("Element not found!");
+            n.printStackTrace();
+            System.out.println(n.getMessage());
+            return null;
+        }
 
 
         String[] totalTimeByRawData = dotabuffPage
-                .select("span[class=duration]")
+                .select(span) // Тут просто выражение для поиска span-а, где записана длительность матча. Референс - duration.png
                 .getFirst()
                 .text()
                 .split(":");
 
 
+        // Парсим нашего "уродца" в Duration.
         Duration midasTime = Duration.ofMinutes(Long.parseLong(midasTimeByRawData[0])).plusSeconds(Long.parseLong(midasTimeByRawData[1]));
         Duration totalTime = Duration.ofMinutes(Long.parseLong(totalTimeByRawData[0])).plusSeconds(Long.parseLong(totalTimeByRawData[1]));
 
-        log.info(String.valueOf(totalTime));
-        log.info(String.valueOf(midasTime));
+        System.out.println(midasTime);
+        System.out.println(totalTime);
+
 
         return getFarmByMidasData(new MidasData(totalTime, midasTime));
 
