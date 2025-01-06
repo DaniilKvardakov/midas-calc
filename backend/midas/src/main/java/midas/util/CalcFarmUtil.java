@@ -29,17 +29,17 @@ public class CalcFarmUtil {
     @Value("${midas.given.money}")
     private int givenMoney = 160;
     @Value("${midas.dotabuff.url.first}")
-    private String firstHalfSecond = "https://ru.dotabuff.com/matches/";
+    private String firstHalfSecond;
     @Value("${midas.dotabuff.url.second}")
-    private String secondHalfURL = "/builds";
+    private String secondHalfURL;
     @Value("${midas.tag.team.table}")
-    private String teamTable = "header[class=header no-padding]";
+    private String teamTable;
     @Value("${midas.icon.a}")
-    private String icon = "<a href=\"/items/hand-of-midas";
+    private String icon;
     @Value("${midas.icon.class}")
-    private String iconClass = "a[href=/items/hand-of-midas]";
+    private String iconClass;
     @Value("${midas.duration.span}")
-    private String span = "span[class=duration]";
+    private String span;
 
     public int getFarmByMidasData(MidasData midasData) {
 
