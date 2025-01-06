@@ -59,4 +59,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -r --delete ./ server216@176.212.127.212:/home/server216/Desktop/Midas
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./ server216@176.212.127.212:/home/server216/Desktop/Midas
