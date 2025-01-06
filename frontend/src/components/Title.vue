@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(["type"])
+const { type } = defineProps(["type"])
 </script>
 
 <template>

@@ -5,7 +5,7 @@ import CalculatorButton from "./CalculatorButton.vue";
 import {useCalcStore} from "../store/calculator";
 import CalculatorTime from "./CalculatorTime.vue";
 
-const props = defineProps<ICalculatorForm>();
+const {inputsConfig} = defineProps<ICalculatorForm>();
 const store = useCalcStore();
 const emit = defineEmits(['submit']);
 
@@ -13,7 +13,7 @@ const onSubmit = () => {
   emit('submit')
 }
 
-const inputHandler = (val) => {
+const inputHandler = (val: {name: string, value: string}) => {
   store.changeFormData(val);
 }
 </script>

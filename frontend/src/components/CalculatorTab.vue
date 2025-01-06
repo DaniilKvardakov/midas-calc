@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type {ICalculatorTabProps} from "../types/calculator.types.ts";
 
-const props = defineProps<ICalculatorTabProps>();
+const { title } = defineProps<ICalculatorTabProps>();
 
 </script>
 

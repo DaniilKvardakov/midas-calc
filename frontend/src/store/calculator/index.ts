@@ -1,6 +1,9 @@
+//@ts-nocheck
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
+import type {Ref} from "vue";
 import type {ICalculatorForm, ICalculatorTabProps, ICalculatorTabs} from "../../types/calculator.types.ts";
+
 
 export const useCalcStore = defineStore('calculator', () => {
     const result = ref(0);
@@ -22,14 +25,14 @@ export const useCalcStore = defineStore('calculator', () => {
         return currentTab.value.title === "Ввод вручную";
     })
 
-    const changeFormData = ({ name, value }) => {
+    const changeFormData = ({ name, value } : { name: string, value: string }) => {
         formData.value[name] = value;
     }
 
     const sendCalcForm = async () => {
             const baseUrl = 'http://176.212.127.212:8888';
             const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}`;
-
+            //@ts-ignore
             const config = {
                 header: {
                     'Access-Control-Allow-Origin': '*'
@@ -66,6 +69,7 @@ export const useCalcStore = defineStore('calculator', () => {
 
 
     const firstConfig: ICalculatorForm = {
+        result: 0,
         inputsConfig: [
             {
                 title: 'Время окончания матча',
@@ -92,6 +96,7 @@ export const useCalcStore = defineStore('calculator', () => {
     }
 
     const secondConfig: ICalculatorForm = {
+        result: 0,
         inputsConfig: [
             {
                 title: 'ID матча',

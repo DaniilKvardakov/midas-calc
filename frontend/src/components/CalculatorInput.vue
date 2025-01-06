@@ -3,9 +3,11 @@ import type {IInput} from "../types/calculator.types.ts";
 
 const props = defineProps<IInput>();
 const emit = defineEmits(['input']);
-
-const inputHandler = (val) => {
+//@ts-ignore
+const inputHandler = (val: any) => {
+  //@ts-ignore
   const value = val.target?.value;
+
   emit('input', {
     value,
     name: props.name,

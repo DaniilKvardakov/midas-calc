@@ -3,7 +3,7 @@ export interface ICalculatorTabProps {
     title: string;
 }
 
-export type ICalculatorTabs = CalculatorTabProps[];
+export type ICalculatorTabs = ICalculatorTabProps[];
 
 export interface ICalculatorForm {
     inputsConfig: IInput[],
