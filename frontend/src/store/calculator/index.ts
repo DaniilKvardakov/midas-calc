@@ -28,14 +28,13 @@ export const useCalcStore = defineStore('calculator', () => {
 
     const sendCalcForm = async () => {
             const baseUrl = 'http://176.212.127.212:8888';
-            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/Boy Next Door`;
+            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}`;
 
             const config = {
                 header: {
                     'Access-Control-Allow-Origin': '*'
                 },
-                mode: 'no-cors',
-                method: isShowInputs.value ? "GET" : "GET",
+                method: isShowInputs.value ? "POST" : "GET",
             }
 
             if(isShowInputs.value) {
@@ -43,8 +42,10 @@ export const useCalcStore = defineStore('calculator', () => {
             }
 
             try {
-                const response = await fetch(baseUrl + '/test', config);
-                console.log('Возвращаем новые данные')
+                const response = await fetch(baseUrl + requestUrl, config);
+                const responseJSON = await response.json();
+                console.log(responseJSON, 'responseJSON');
+                console.log('Возвращаем новые данные');
             } catch(e) {
                 console.error(e);
             } finally {
@@ -55,9 +56,10 @@ export const useCalcStore = defineStore('calculator', () => {
     const convertDataToRequest = () => {
         const convertedFormData = new FormData();
 
-        for(let item in formData.value) {
-            convertedFormData.append(item, formData.value[item]);
-        }
+        convertedFormData.append('totalTimeOfMatch', formData.value.totalTimeOfMatch)
+        convertedFormData.append('midasTime', formData.value.midasTime)
+        convertedFormData.append('timeOfSellMidas', formData.value.timeOfSellMidas)
+        convertedFormData.append('wastedTime', 'PT10M')
 
         return convertedFormData;
     }
@@ -66,30 +68,23 @@ export const useCalcStore = defineStore('calculator', () => {
     const firstConfig: ICalculatorForm = {
         inputsConfig: [
             {
-                title: 'ID матча',
-                name: 'test',
-                type: 'input',
+                title: 'Время окончания матча',
+                name: 'totalTimeOfMatch',
+                type: 'time',
                 defaultVal: '',
                 required: true,
             },
             {
-                title: 'ID матча',
-                name: 'test2',
-                type: 'input',
+                title: 'Время покупки Мидаса',
+                name: 'midasTime',
+                type: 'time',
                 defaultVal: '',
                 required: true,
             },
             {
-                title: 'ID матча',
-                name: 'test3',
-                type: 'input',
-                defaultVal: '',
-                required: true,
-            },
-            {
-                title: 'ID матча',
-                name: 'test4',
-                type: 'input',
+                title: 'Время продажи Мидаса',
+                name: 'timeOfSellMidas',
+                type: 'time',
                 defaultVal: '',
                 required: true,
             },
@@ -104,18 +99,20 @@ export const useCalcStore = defineStore('calculator', () => {
                 type: 'input',
                 defaultVal: '',
                 required: true,
+            },
+            {
+                title: 'Никнейм',
+                name: 'nickname',
+                type: 'input',
+                defaultVal: '',
+                required: true,
             }
         ]
     }
 
-
     const changeTabHandler = (tab: ICalculatorTabProps) => {
         currentTab.value = tab;
     }
-
-
-
-
 
     return { result, formData, changeFormData, currentTab, firstConfig, secondConfig, changeTabHandler, isShowInputs, sendCalcForm, calcTabs}
 })

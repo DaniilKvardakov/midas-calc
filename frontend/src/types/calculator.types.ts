@@ -13,7 +13,7 @@ export interface ICalculatorForm {
 export interface IInput {
     title: string;
     name: string;
-    type: 'input' | "checkbox";
+    type: 'input' | "checkbox" | "time";
     defaultVal?: string;
     required: boolean;
 }

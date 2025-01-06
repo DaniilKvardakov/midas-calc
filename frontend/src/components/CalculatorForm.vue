@@ -3,6 +3,7 @@ import type {ICalculatorForm} from "../types/calculator.types.ts";
 import CalculatorInput from "./CalculatorInput.vue";
 import CalculatorButton from "./CalculatorButton.vue";
 import {useCalcStore} from "../store/calculator";
+import CalculatorTime from "./CalculatorTime.vue";
 
 const props = defineProps<ICalculatorForm>();
 const store = useCalcStore();
@@ -20,7 +21,10 @@ const inputHandler = (val) => {
 <template>
   <form @submit.prevent="onSubmit" :class="$style.CalculatorForm">
       <div :class="$style.CalculatorInputWrap">
-        <CalculatorInput v-for="input in inputsConfig" :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
+        <template v-for="input in inputsConfig">
+          <CalculatorTime v-if="input.type === 'time'" :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
+          <CalculatorInput v-else :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
+        </template>
       </div>
       <CalculatorButton :style="{marginTop: 'auto'}">
         Отправить
@@ -42,7 +46,8 @@ const inputHandler = (val) => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px 40px;
-  margin: auto;
+  margin: 0 0 20px;
   min-height: 106px;
+  width: 100%;
 }
 </style>

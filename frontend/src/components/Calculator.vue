@@ -20,6 +20,7 @@ const calcStore = useCalcStore();
   overflow: hidden;
   position: relative;
   z-index: 3;
+  min-width: 660px;
 }
 
 .CalculatorTabs {

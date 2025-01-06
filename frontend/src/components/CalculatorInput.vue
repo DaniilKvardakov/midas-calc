@@ -23,15 +23,12 @@ const inputHandler = (val) => {
 </template>
 
 <style module>
-.CalculatorInputWrapper {
-
-}
-
 .CalculatorInput {
   border: none;
   border-bottom: 1px solid var(--main-orange);
   padding-bottom: 10px;
   outline: none;
+  width: 100%;
 
 
   &:focus {
@@ -40,7 +37,7 @@ const inputHandler = (val) => {
 }
 
 .CalculatorInputTitle {
-  font-size: 12px;
-  color: #9b9b9b  ;
+  font-size: 14px;
+  color: #9b9b9b;
 }
 </style>
