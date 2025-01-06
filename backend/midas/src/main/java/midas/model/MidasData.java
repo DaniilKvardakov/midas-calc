@@ -1,8 +1,9 @@
 package midas.model;
 
+import java.io.Serializable;
 import java.time.Duration;
 
-public class MidasData {
+public class MidasData implements Serializable {
 
     private final Duration totalTimeOfMatch;
     private final Duration midasTime;
