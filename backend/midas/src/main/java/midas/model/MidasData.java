@@ -2,43 +2,37 @@ package midas.model;
 
 import java.time.Duration;
 
-
 public class MidasData {
 
-    private Duration totalTimeOfMatch;
-    private Duration midasTime;
+    private final Duration totalTimeOfMatch;
+    private final Duration midasTime;
+    private final Duration wastedTime;
     private Duration timeOfSellMidas;
-    private int failMidasCast;
 
-    public Duration getTotalTimeOfMatch() {
-        return totalTimeOfMatch;
-    }
-
-    public void setTotalTimeOfMatch(Duration totalTimeOfMatch) {
+    public MidasData(Duration totalTimeOfMatch, Duration midasTime, Duration timeOfSellMidas, Duration wastedTime) {
         this.totalTimeOfMatch = totalTimeOfMatch;
-    }
-
-    public Duration getMidasTime() {
-        return midasTime;
-    }
-
-    public void setMidasTime(Duration midasTime) {
         this.midasTime = midasTime;
-    }
-
-    public Duration getTimeOfSellMidas() {
-        return timeOfSellMidas;
+        this.timeOfSellMidas = timeOfSellMidas;
+        this.wastedTime = wastedTime;
     }
 
     public void setTimeOfSellMidas(Duration timeOfSellMidas) {
         this.timeOfSellMidas = timeOfSellMidas;
     }
 
-    public int getFailMidasCast() {
-        return failMidasCast;
+    public Duration getTotalTimeOfMatch() {
+        return totalTimeOfMatch;
     }
 
-    public void setFailMidasCast(int failMidasCast) {
-        this.failMidasCast = failMidasCast;
+    public Duration getMidasTime() {
+        return midasTime;
+    }
+
+    public Duration getTimeOfSellMidas() {
+        return timeOfSellMidas;
+    }
+
+    public Duration getWastedTime() {
+        return wastedTime;
     }
 }
