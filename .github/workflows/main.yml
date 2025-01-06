@@ -37,7 +37,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.9.1' # Поменяйте на вашу версию Node.js
+          node-version: '18' # Поменяйте на вашу версию Node.js
 
       - name: Install Dependencies
         run: npm install
