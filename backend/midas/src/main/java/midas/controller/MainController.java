@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,14 +45,23 @@ public class MainController {
 
         Map<Status, MidasResponse> checkErrorsMap = calcFarmUtil.getFarmById(nick, id);
         if (checkErrorsMap.get(Status.PARSE_ERROR) != null)
-            return new ResponseEntity<>(MidasResponse.BAD_MIDAS_RESPONSE.statusAndMessage(Status.PARSE_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                    .body(MidasResponse.BAD_MIDAS_RESPONSE.statusAndMessage(Status.PARSE_ERROR));
         else if (checkErrorsMap.get(Status.DOTABUFF_URL_ERROR) != null)
-            return new ResponseEntity<>(MidasResponse.BAD_MIDAS_RESPONSE.statusAndMessage(Status.DOTABUFF_URL_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                    .body(MidasResponse.BAD_MIDAS_RESPONSE.statusAndMessage(Status.DOTABUFF_URL_ERROR));
 
         MidasResponse response = calcFarmUtil.getFarmById(nick, id).get(Status.NO_ERRORS);
 
         System.out.println(response);
-        return new ResponseEntity<>(response.statusAndMessage(Status.NO_ERRORS), HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .body(response.statusAndMessage(Status.NO_ERRORS));
 
     }
 
@@ -59,8 +69,18 @@ public class MainController {
     public ResponseEntity<MidasResponse> getByData(@RequestBody MidasData midasData) {
 
         MidasResponse response = calcFarmUtil.getFarmByMidasData(midasData).get(Status.NO_ERRORS);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .body(response.statusAndMessage(Status.NO_ERRORS));
+    }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @GetMapping("/test")
+    public ResponseEntity<Integer> test(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .body(1);
     }
 
     @Bean
