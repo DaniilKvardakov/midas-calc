@@ -55,21 +55,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install sshpass
-        run: sudo apt-get install -y sshpass
+        run: |
+          sudo apt-get install -y sshpass
 
-      - name: Deploy to Server
+      - name: ssh check
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }}
-          << EOF
-          cd /home/server216/Desktop/Midas
-          rm -rf *
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh ${{ secrets.USER }}@${{ secrets.HOST }} << EOF
+          echo "ok"
           EOF
-      - name: Upload Project Files to Server
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./backend/midas/target/*.jar \
-          ${{ secrets.USER }}@${{ secrets.HOST }}:/home/server216/Desktop/Midas/
-          echo "Деплой бэкенда завершён"
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./frontend/* \
-          ${{ secrets.USER }}@${{ secrets.HOST }}:/home/server216/Desktop/Midas/
-          echo "Деплой фронтенда завершён"
+          
+          
+       
           
