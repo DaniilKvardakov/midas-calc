@@ -8,6 +8,11 @@ import type {ICalculatorForm, ICalculatorTabProps, ICalculatorTabs} from "../../
 export const useCalcStore = defineStore('calculator', () => {
     const result = ref(0);
     const formData = ref({});
+    const isButtonDisabled = ref(false);
+    const isSpinActive = ref(false);
+    const isShowResult = ref(false);
+    const sendedData = ref({})
+
     const calcTabs: ICalculatorTabs = [
         {
             id: 0,
@@ -45,13 +50,22 @@ export const useCalcStore = defineStore('calculator', () => {
             }
 
             try {
+                isButtonDisabled.value = true;
+                isSpinActive.value = true;
+                isShowResult.value = false;
                 const response = await fetch(baseUrl + requestUrl, config);
                 const responseJSON = await response.json();
-                console.log(responseJSON, 'responseJSON');
-                console.log('Возвращаем новые данные');
+
+                sendedData.value = {
+                    ...responseJSON
+                }
             } catch(e) {
                 console.error(e);
+                console.log(e, 'e')
             } finally {
+                isShowResult.value = true;
+                isButtonDisabled.value = false;
+                isSpinActive.value = false;
                 console.log('Последние штрихи, убираем будущий прелоадер')
             }
     }
@@ -117,7 +131,9 @@ export const useCalcStore = defineStore('calculator', () => {
 
     const changeTabHandler = (tab: ICalculatorTabProps) => {
         currentTab.value = tab;
+        sendedData.value = {};
+        isShowResult.value = false;
     }
 
-    return { result, formData, changeFormData, currentTab, firstConfig, secondConfig, changeTabHandler, isShowInputs, sendCalcForm, calcTabs}
+    return { result, formData, changeFormData, currentTab, firstConfig, secondConfig, changeTabHandler, isShowInputs, sendCalcForm, calcTabs, isButtonDisabled, isSpinActive, isShowResult, sendedData}
 })

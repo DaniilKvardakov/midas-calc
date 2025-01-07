@@ -6,9 +6,9 @@ const { title } = defineProps<ICalculatorTabProps>();
 </script>
 
 <template>
-  <div :class="$style.CalculatorTab">
+  <h4 :class="$style.CalculatorTab">
     {{ title }}
-  </div>
+  </h4>
 </template>
 
 <style module>

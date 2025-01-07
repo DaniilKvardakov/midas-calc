@@ -3,11 +3,17 @@ import Calculator from "./components/Calculator.vue";
 import Title from "./components/Title.vue";
 import {useCalcStore} from "./store/calculator";
 import {reactive,ref} from "vue";
+import './style.css'
+import Preloader from "./components/Preloader.vue";
 
+const audio = ref(0);
 const calcStore = useCalcStore();
-const submitHandler = () => calcStore.sendCalcForm();
-
 const currentImg = ref(0);
+
+const submitHandler = async () => {
+  await calcStore.sendCalcForm();
+  audio.value.play()
+};
 
 
 const images = reactive({
@@ -55,8 +61,13 @@ setInterval(() => {
 
      <div :class="$style.MainCover"></div>
      <Title type="h1" :style="{margin: ' 0 0 0.17em'}">Калькулятор Мидаса</Title>
-     <Title type="h2" :style="{margin: ' 0 0 0.97em'}">Крутейший в мире подзаголовок</Title>
-    <Calculator @submit="submitHandler"></Calculator>
+     <Title type="h2" :style="{margin: ' 0 0 0.97em'}">Крутейший (и единственный) в мире</Title>
+
+     <Preloader :is-loading="calcStore.isSpinActive">
+       <Calculator @submit="submitHandler"></Calculator>
+     </Preloader>
+
+     <audio ref="audio" class="" volume="0.025" controls src="/src/assets/midassound.mpeg" :class="$style.CalculatorSound"></audio>
  </div>
 </template>
 
@@ -103,6 +114,13 @@ setInterval(() => {
   top: 0;
   left: 0;
   transition: opacity 2s linear;
+}
+
+.CalculatorSound {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  user-select: none;
 }
 </style>
 

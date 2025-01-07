@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import {ref} from "vue";
 import type {ICalculatorForm} from "../types/calculator.types.ts";
 import CalculatorInput from "./CalculatorInput.vue";
 import CalculatorButton from "./CalculatorButton.vue";
 import {useCalcStore} from "../store/calculator";
 import CalculatorTime from "./CalculatorTime.vue";
+import CalculatorResult from "./CalculatorResult.vue";
 
 const {inputsConfig} = defineProps<ICalculatorForm>();
 const store = useCalcStore();
@@ -26,6 +28,7 @@ const inputHandler = (val: {name: string, value: string}) => {
           <CalculatorInput v-else :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
         </template>
       </div>
+      <CalculatorResult :is-show-result="store.isShowResult"></CalculatorResult>
       <CalculatorButton :style="{marginTop: 'auto'}">
         Отправить
       </CalculatorButton>
