@@ -59,4 +59,17 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./ server216@176.212.127.212:/home/server216/Desktop/Midas
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }}
+          << EOF
+          cd /home/server216/Desktop/Midas
+          rm -rf *
+          EOF
+      - name: Upload Project Files to Server
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./backend/midas/target/*.jar \
+          ${{ secrets.USER }}@${{ secrets.HOST }}:/home/server216/Desktop/Midas/
+          echo "Деплой бэкенда завершён"
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -r ./frontend/* \
+          ${{ secrets.USER }}@${{ secrets.HOST }}:/home/server216/Desktop/Midas/
+          echo "Деплой фронтенда завершён"
+          
