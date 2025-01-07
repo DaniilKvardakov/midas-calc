@@ -60,7 +60,7 @@ jobs:
 
       - name: ssh check
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -t ${{ secrets.USER }}@${{ secrets.HOST }} << EOF
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -tt ${{ secrets.USER }}@${{ secrets.HOST }} << EOF
           echo "ok"
           EOF
           
