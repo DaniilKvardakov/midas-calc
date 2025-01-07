@@ -55,8 +55,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
-      - name: Deploy to Server
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete ./ server216@176.212.127.212:/home/server216/Desktop/Midas
+          sudo apt-get install -y sshpass
+
+      - name: ssh check
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -tt ${{ secrets.USER }}@${{ secrets.HOST }} << EOF
+          echo "ok"
+          EOF
+          
+          
+       
+          
