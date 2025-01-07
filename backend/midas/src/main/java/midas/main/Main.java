@@ -1,12 +1,10 @@
 package midas.main;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import midas.model.MidasData;
+import midas.util.CalcFarmUtil;
 
 public class Main {
     public static void main(String[] args) {
-        HashMap<String, String> map = new HashMap<>(Map.of("S", "S"));
-        System.out.println(map.get("SV"));
+       /*new CalcFarmUtil().getFarmByMidasData(new MidasData());*/
     }
 }

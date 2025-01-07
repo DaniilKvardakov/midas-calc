@@ -44,6 +44,8 @@ public class CalcFarmUtil {
     private String span;
     @Value("${midas.dotabuff.timeout}")
     private int timeout;
+    @Value("${midas.price}")
+    private int midasPrice;
 
     public Map<Status, MidasResponse> getFarmByMidasData(MidasData midasData) {
 
@@ -52,14 +54,23 @@ public class CalcFarmUtil {
             midasData.setTimeOfSellMidas(midasData.getTotalTimeOfMatch());
 
         // ( ( Время длительности матча - время покупки мидаса - потерянное время ) / кулдаун мидаса ) * награда с использования мидаса
-        int result = (int) ((midasData.getTotalTimeOfMatch().minus(midasData.getMidasTime()).minus(midasData.getWastedTime()).getSeconds() / cooldown) * givenMoney);
+        int numOfUses = (int)(midasData.getTotalTimeOfMatch().minus(midasData.getMidasTime()).minus(midasData.getWastedTime()).getSeconds() / cooldown);
+        int result = numOfUses * givenMoney;
         int resultBufferBeforeSale = result;
+
+        // Подсчет тайминга окупа.
+        int priceBuffer = 0;
+        Duration durationBuffer = Duration.ZERO;
+        while (priceBuffer < midasPrice) {
+            durationBuffer = durationBuffer.plus(Duration.ofSeconds(110));
+            priceBuffer += 160;
+        }
 
         // Если клиент отправил тайминг продажи, то к прибыли от мидаса прибавляем бабки от его продажи.
         if (!midasData.getTotalTimeOfMatch().equals(midasData.getTimeOfSellMidas()))
             result += salePrice;
 
-        return Map.of(Status.NO_ERRORS, new MidasResponse(resultBufferBeforeSale, result == resultBufferBeforeSale ? 0 : result));
+        return Map.of(Status.SUCCESS, new MidasResponse(resultBufferBeforeSale, result == resultBufferBeforeSale ? 0 : result, durationBuffer.getSeconds() / 60));
 
     }
 
@@ -70,7 +81,7 @@ public class CalcFarmUtil {
             URI dotabuffURL = new URI(firstHalfSecond + matchId + secondHalfURL);
             dotabuffPage = Jsoup.parse(dotabuffURL.toURL(), timeout);
         } catch (IOException | URISyntaxException e) {
-            return Map.of(Status.DOTABUFF_URL_ERROR, MidasResponse.BAD_MIDAS_RESPONSE);
+            return Map.of(Status.ERROR, MidasResponse.BAD_MIDAS_RESPONSE);
         }
 
         Elements elements = dotabuffPage.select(teamTable); // Ищем "div" с референсом team_table.png
@@ -95,7 +106,7 @@ public class CalcFarmUtil {
                     .split(":");
 
         } catch (NullPointerException n) {
-            return Map.of(Status.PARSE_ERROR, MidasResponse.BAD_MIDAS_RESPONSE);
+            return Map.of(Status.ERROR, MidasResponse.BAD_MIDAS_RESPONSE);
         }
 
 
@@ -110,7 +121,7 @@ public class CalcFarmUtil {
         Duration midasTime = Duration.ofMinutes(Long.parseLong(midasTimeByRawData[0])).plusSeconds(Long.parseLong(midasTimeByRawData[1]));
         Duration totalTime = Duration.ofMinutes(Long.parseLong(totalTimeByRawData[0])).plusSeconds(Long.parseLong(totalTimeByRawData[1]));
 
-        return getFarmByMidasData(new MidasData(totalTime, midasTime, Duration.ZERO, Duration.ZERO));
+        return getFarmByMidasData(new MidasData(totalTime, midasTime, totalTime, Duration.ZERO));
 
     }
 

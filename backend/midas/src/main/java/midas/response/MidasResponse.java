@@ -3,6 +3,7 @@ package midas.response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
+
 @PropertySource("classpath:midas.properties")
 public class MidasResponse {
 
@@ -12,17 +13,19 @@ public class MidasResponse {
 
 
     @Value("${midas.price}")
-    private int midasPrice;
+    private static int midasPrice;
     private int profitUntilEnd;
     private int profitAfterSale;
     private boolean isPaidOf;
+    private long timeOfPayback; // In minutes.
 
     private  MidasResponse() { }
 
-    public MidasResponse(int profitUntilEnd, int profitAfterSale) {
+    public MidasResponse(int profitUntilEnd, int profitAfterSale, long timeOfPayback) {
         this.profitUntilEnd = profitUntilEnd;
         this.profitAfterSale = profitAfterSale == 0 ? profitUntilEnd : profitAfterSale;
         this.isPaidOf = profitAfterSale >= midasPrice;
+        this.timeOfPayback = timeOfPayback;
     }
 
     public MidasResponse status(Status status) {
@@ -39,6 +42,22 @@ public class MidasResponse {
         this.status = status;
         this.message = status.getMessage();
         return this;
+    }
+
+    public static int getMidasPrice() {
+        return midasPrice;
+    }
+
+    public static void setMidasPrice(int midasPrice) {
+        MidasResponse.midasPrice = midasPrice;
+    }
+
+    public long getTimeOfPayback() {
+        return timeOfPayback;
+    }
+
+    public void setTimeOfPayback(long timeOfPayback) {
+        this.timeOfPayback = timeOfPayback;
     }
 
     public Status getStatus() {
