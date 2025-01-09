@@ -184,3 +184,5 @@ backend/.idea
 .idea
 
 # End of https://www.toptal.com/developers/gitignore/api/vue,node,java
+
+/backend/midas/src/main/resources/secret/**
