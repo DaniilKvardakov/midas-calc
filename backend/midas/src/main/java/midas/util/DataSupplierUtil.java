@@ -1,6 +1,7 @@
 package midas.util;
 
-import midas.model.PhraseEntity;
+import midas.annotations.Commented;
+import midas.models.PhraseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -16,16 +17,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Компонент выдачи путей к картинкам и фразам героев.
+ */
+@Commented
 @Component
-@PropertySource("classpath:phrases.properties")
+@PropertySource("classpath:secret/phrases.properties")
 public class DataSupplierUtil {
 
+    /**
+     * Путь к иконками героев и их фразам о мидасе.
+     */
     @Value("${phrase.icon.root}")
     private String dataRoot;
 
-
-    // Возвращает массив строк из файла.
+    /**
+     * Метод возвращающий массив строк(фраз) из файла.
+     * @param filePath путь к файлу.
+     * @return пара путь/массив строк(фраз)
+     */
     public static Map.Entry<Path, List<String>> downloadFromFile(String filePath) {
         List<String> lines;
         Path path = Paths.get(filePath);
@@ -38,7 +48,12 @@ public class DataSupplierUtil {
         return new AbstractMap.SimpleEntry<>(path, lines);
     }
 
-    // Определяет пути к файлам с фразами.
+
+    /**
+     * Метод определяющий пути к файлам с фразами.
+     * @param mainPackage путь к корневой директории.
+     * @return массив строк(фраз).
+     */
     public static List<String> getAllRoots(String mainPackage) {
         List<Path> txtFiles = new ArrayList<>();
 
@@ -64,25 +79,38 @@ public class DataSupplierUtil {
                 .toList();
     }
 
-    // Возвращает все PhraseEntity.
+
+    /**
+     * Метод возвращающий все PhraseEntity.
+     * @return сущность фраз.
+     * @see PhraseEntity
+     */
     public List<PhraseEntity> getAllPhrases() {
 
         List<PhraseEntity> phrases = new ArrayList<>();
 
-        for (String root : getAllRoots("backend/midas/src/main/resources/static/data")) {
+        for (String root : getAllRoots(dataRoot)) {
             Map.Entry<Path, List<String>> source = downloadFromFile(root);
             String heroName = source.getKey().getFileName().toString().replaceAll(".txt", "");
             List<String> rawPhrases = source.getValue();
-            phrases.add(new PhraseEntity(upFirst(heroName), source.getKey().toString().replaceAll("\\\\", "/").replaceAll(".txt", ".png"), rawPhrases));
+            phrases.add(new PhraseEntity(upFirst(heroName), source
+                    .getKey()
+                    .subpath(source.getKey().getNameCount() - 3, source.getKey().getNameCount())
+                    .toString()
+                    .replaceAll("\\\\", "/")
+                    .replaceAll(".txt", ".webp"), rawPhrases));
         }
 
         return phrases;
     }
 
+    /**
+     * Метод возвращающий строку с большой буквы.
+     * @param string исходная строка.
+     * @return отформатированная строка.
+     */
     public String upFirst(String string){
         return String.valueOf(string.charAt(0)).toUpperCase() + string.substring(1);
     }
-
-
 
 }
