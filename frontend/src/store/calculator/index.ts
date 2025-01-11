@@ -32,7 +32,7 @@ export const useCalcStore = defineStore('calculator', () => {
 
     const sendCalcForm = async () => {
         const baseUrl = 'http://176.212.127.212:8888';
-            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}/${formData.value.friendCode}`;
+            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}/${formData.value.friendCode || ''}`;
             //@ts-ignore
             const config = {
                 header: {
