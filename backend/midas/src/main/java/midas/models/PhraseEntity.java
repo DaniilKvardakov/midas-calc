@@ -1,11 +1,26 @@
-package midas.model;
+package midas.models;
+
+import midas.annotations.Commented;
 
 import java.util.List;
 
+/**
+ * Сущность фраз(о мидасе) героев.
+ */
+@Commented
 public class PhraseEntity {
 
+    /**
+     * Имя героя.
+     */
     private String nameOfHero;
+    /**
+     * Путь к иконке героя.
+     */
     private String rootToImg;
+    /**
+     * Список фраз героя.
+     */
     private List<String> phrases;
 
     public PhraseEntity(String nameOfHero, String rootToImg, List<String> phrases) {
