@@ -24,7 +24,7 @@ const inputHandler = () => {
     </div>
     <div :class="$style.CalculatorTimeWrapper">
       <div :class="$style.CalculatorTimeInputWrapper">
-        <input type="number" :class="$style.CalculatorTimeInput" @input="inputHandler" v-model="time.minutes" :required="required" max="240">
+        <input type="number" :class="$style.CalculatorTimeInput" @input="inputHandler" v-model="time.minutes" :required="required" max="240" min="5">
         <span :class="$style.CalculatorTimeInputLabel">мин.</span>
       </div>
     </div>

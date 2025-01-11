@@ -5,10 +5,15 @@ import {useCalcStore} from "./store/calculator";
 import {reactive,ref} from "vue";
 import './style.css'
 import Preloader from "./components/Preloader.vue";
+import {useQuotesStore} from "./store/quotes";
+import Quote from "./components/Quote.vue";
 
 const audio = ref(0);
 const calcStore = useCalcStore();
+const quoteStore = useQuotesStore();
 const currentImg = ref(0);
+
+quoteStore.getQuoteList();
 
 const submitHandler = async () => {
   await calcStore.sendCalcForm();
@@ -58,14 +63,25 @@ setInterval(() => {
      <div :class="$style.MainImg" :style="images.first"></div>
      <div :class="$style.SecondImg" :style="images.second"></div>
      <div :class="$style.ThirdImg" :style="images.third"></div>
-
      <div :class="$style.MainCover"></div>
+
      <Title type="h1" :style="{margin: ' 0 0 0.17em'}">Калькулятор Мидаса</Title>
      <Title type="h2" :style="{margin: ' 0 0 0.97em'}">Крутейший (и единственный) в мире</Title>
 
      <Preloader :is-loading="calcStore.isSpinActive">
        <Calculator @submit="submitHandler"></Calculator>
      </Preloader>
+
+<!--     <div :class="$style.QuoteList" v-if="quoteStore.quoteList?.length">-->
+<!--       <Quote v-for="quote in quoteStore.quoteList"-->
+<!--              :id="quote.id"-->
+<!--              :is-active="quoteStore.currentQuote?.id === quote.id"-->
+<!--              :name-of-hero="quote.nameOfHero"-->
+<!--              :root-to-img="quote.rootToImg"-->
+<!--              :phrase="quote.phrase">-->
+
+<!--       </Quote>-->
+<!--     </div>-->
 
      <audio ref="audio" class="" volume="0.025" controls src="/src/assets/midassound.mpeg" :class="$style.CalculatorSound"></audio>
  </div>
@@ -80,6 +96,9 @@ setInterval(() => {
   width: 100%;
   height: 100%;
   background-color: var(--main-black);
+  @media(max-width: 570px) {
+    margin: 0 15px;
+  }
 }
 
 .MainCover {
@@ -121,6 +140,16 @@ setInterval(() => {
   z-index: -1;
   opacity: 0;
   user-select: none;
+}
+
+.QuoteList {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  max-width: 400px;
+  width: 100%;
 }
 </style>
 

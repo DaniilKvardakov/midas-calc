@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, onUnmounted} from "vue";
 import type {ICalculatorForm} from "../types/calculator.types.ts";
 import CalculatorInput from "./CalculatorInput.vue";
 import CalculatorButton from "./CalculatorButton.vue";
@@ -10,6 +10,7 @@ import CalculatorResult from "./CalculatorResult.vue";
 const {inputsConfig} = defineProps<ICalculatorForm>();
 const store = useCalcStore();
 const emit = defineEmits(['submit']);
+const form = ref(null);
 
 const onSubmit = () => {
   emit('submit')
@@ -21,7 +22,7 @@ const inputHandler = (val: {name: string, value: string}) => {
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" :class="$style.CalculatorForm">
+  <form ref="form" @submit.prevent="onSubmit" :class="$style.CalculatorForm">
       <div :class="$style.CalculatorInputWrap">
         <template v-for="input in inputsConfig">
           <CalculatorTime v-if="input.type === 'time'" :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
@@ -52,5 +53,9 @@ const inputHandler = (val: {name: string, value: string}) => {
   margin: 0 0 20px;
   min-height: 106px;
   width: 100%;
+
+  @media(max-width: 480px) {
+    grid-template-columns: 1fr ;
+  }
 }
 </style>

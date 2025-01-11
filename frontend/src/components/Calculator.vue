@@ -10,7 +10,6 @@ const calcStore = useCalcStore();
     <div :class="$style.CalculatorTabs">
         <CalculatorTab v-for="tab in calcStore.calcTabs" :id="tab.id" :title="tab.title" @click="calcStore.changeTabHandler(tab)" :class="{[$style.active] : calcStore.currentTab.id === tab.id}" />
     </div>
-    <CalculatorForm v-show="calcStore.isShowInputs" :inputs-config="calcStore.firstConfig.inputsConfig" :result="calcStore.result" />
     <CalculatorForm v-show="!calcStore.isShowInputs" :inputs-config="calcStore.secondConfig.inputsConfig" :result="calcStore.result" />
   </div>
 </template>
@@ -20,7 +19,12 @@ const calcStore = useCalcStore();
   overflow: hidden;
   position: relative;
   z-index: 3;
-  min-width: 550px;
+  max-width: 550px;
+  width: 100%;
+
+  @media(max-width: 570px) {
+    min-width: auto;
+  }
 }
 
 .CalculatorTabs {

@@ -16,11 +16,7 @@ export const useCalcStore = defineStore('calculator', () => {
     const calcTabs: ICalculatorTabs = [
         {
             id: 0,
-            title: "Id матча",
-        },
-        {
-            id: 1,
-            title: "Ввод вручную",
+            title: "Введите данные",
         },
     ];
 
@@ -35,8 +31,8 @@ export const useCalcStore = defineStore('calculator', () => {
     }
 
     const sendCalcForm = async () => {
-            const baseUrl = 'http://176.212.127.212:8888';
-            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}`;
+        const baseUrl = 'http://176.212.127.212:8888';
+            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}/${formData.value.friendCode}`;
             //@ts-ignore
             const config = {
                 header: {
@@ -61,7 +57,10 @@ export const useCalcStore = defineStore('calculator', () => {
                 }
             } catch(e) {
                 console.error(e);
-                console.log(e, 'e')
+                sendedData.value = {
+                    message: 'Возникла непредвиденная ошибка',
+                    status: 'ERROR',
+                }
             } finally {
                 isShowResult.value = true;
                 isButtonDisabled.value = false;
@@ -125,6 +124,13 @@ export const useCalcStore = defineStore('calculator', () => {
                 type: 'input',
                 defaultVal: '',
                 required: true,
+            },
+            {
+                title: 'Код дружбы(не обязательно)',
+                name: 'friendCode',
+                type: 'input',
+                defaultVal: '',
+                required: false,
             }
         ]
     }

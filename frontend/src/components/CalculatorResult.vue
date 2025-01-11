@@ -35,8 +35,6 @@ const isStatusSuccess = computed(() => store.sendedData?.status === 'SUCCESS')
 <style module>
 .CalculatorResult {
   font-size: 18px;
-
-  height: 0;
   opacity: 0;
   transition: height .3s linear;
 
@@ -45,13 +43,9 @@ const isStatusSuccess = computed(() => store.sendedData?.status === 'SUCCESS')
 }
 
 .CalculatorResultExtended {
-  height: 66px;
   opacity: 1;
 }
 
-.CalculatorResultExtendedError {
-  height: 31px;
-}
 
 .CalculatorResultItem {
   margin-bottom: 10px;
