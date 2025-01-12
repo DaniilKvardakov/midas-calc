@@ -16,4 +16,11 @@ public class SteamUserData {
     public void setSteamResponse(SteamResponse steamResponse) {
         this.steamResponse = steamResponse;
     }
+
+    @Override
+    public String toString() {
+        return "SteamUserData{" +
+                "steamResponse=" + steamResponse +
+                '}';
+    }
 }

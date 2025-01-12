@@ -18,4 +18,11 @@ public class SteamResponse {
     public void setPlayers(List<SteamPlayer> players) {
         this.players = players;
     }
+
+    @Override
+    public String toString() {
+        return "SteamResponse{" +
+                "players=" + players +
+                '}';
+    }
 }

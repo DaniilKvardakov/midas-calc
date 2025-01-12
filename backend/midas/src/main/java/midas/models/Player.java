@@ -52,11 +52,11 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "personaName='" + personaName + '\'' +
-                ", itemUses=" + itemUses +
-                ", accountId=" + accountId +
-                ", purchaseLogs=" + purchaseLogs +
-                '}';
+        return "\nPlayer{" +
+                "\n personaName=" + personaName +
+                ",\n itemUses=" + itemUses +
+                ",\n accountId=" + accountId +
+                ",\n purchaseLogs=" + purchaseLogs +
+                "\n}";
     }
 }

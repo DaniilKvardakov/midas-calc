@@ -3,9 +3,9 @@ package midas.controllers;
 import midas.annotations.NoCommentsNeeded;
 import midas.dto.MidasResponseDTO;
 import midas.models.PhraseEntity;
+import midas.service.MidasService;
+import midas.service.PhraseService;
 import midas.util.ResponseUtil;
-import midas.util.CalcFarmUtil;
-import midas.util.DataSupplierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -26,16 +26,15 @@ public class MainController {
 
     @Value("${url.swagger}")
     private String swaggerURL;
-    private final CalcFarmUtil calcFarmUtil;
-    private final DataSupplierUtil dataSupplierUtil;
-    private final ResponseUtil responseUtil;
+    private final MidasService midasService;
+    private final PhraseService phraseService;
 
     @Autowired
-    public MainController(CalcFarmUtil calcFarmUtil, List<PhraseEntity> phraseEntities, DataSupplierUtil dataSupplierUtil, ResponseUtil responseUtil) {
-        this.calcFarmUtil = calcFarmUtil;
-        this.dataSupplierUtil = dataSupplierUtil;
-        this.responseUtil = responseUtil;
+    public MainController(MidasService midasService, PhraseService phraseService) {
+        this.midasService = midasService;
+        this.phraseService = phraseService;
     }
+
 
     @GetMapping("/swagger")
     public RedirectView swagger() {
@@ -43,8 +42,15 @@ public class MainController {
     }
 
     @GetMapping("/profit/{id}/{nick}/{code}")
-    public ResponseEntity<MidasResponseDTO> getByApi(@PathVariable long id, @PathVariable String nick, @PathVariable long code) {
-        return responseUtil.checkAndGet(calcFarmUtil.getFarmByParseMatch(id, nick, code));
+    public ResponseEntity<MidasResponseDTO> getByApi(@PathVariable long id, @PathVariable String nick, @PathVariable Long code) {
+        System.out.println("id: " + id + "\nnick: " + nick + "\ncode: " + code + "\n\n");
+        return ResponseUtil.checkAndGet(midasService.getFarmByParseMatch(id, nick, code));
+    }
+
+    @GetMapping("/profit/{id}/{nick}/")
+    public ResponseEntity<MidasResponseDTO> getByApi(@PathVariable long id, @PathVariable String nick) {
+        System.out.println("id: " + id + "\nnick: " + nick + "\n\n");
+        return ResponseUtil.checkAndGet(midasService.getFarmByParseMatch(id, nick, null));
     }
 
     @GetMapping(value = "/phrase", produces = "application/json;charset=UTF-8")
@@ -57,7 +63,7 @@ public class MainController {
                 .status(HttpStatus.OK)
                 .headers(headers)
                 .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                .body(dataSupplierUtil.getAllPhrases());
+                .body(phraseService.getAllPhrases());
     }
 
 }
