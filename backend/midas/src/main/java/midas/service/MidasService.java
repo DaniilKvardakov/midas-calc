@@ -81,7 +81,7 @@ public class MidasService {
      * @see Player
      * @see PurchaseLog
      */
-    public Map.Entry<Status, MidasResponse> getFarmByParseMatch(long matchId, String nick, Long friendCode) {
+    public Map.Entry<Status, MidasResponse> getFarm(long matchId, String nick, Long friendCode) {
 
         // Отправляем запрос на парсинг.
         ParsingProcess parsingProcess = openDotaAPIClient.getParsingProcessById(matchId);

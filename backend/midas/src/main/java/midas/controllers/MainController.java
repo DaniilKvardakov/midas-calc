@@ -42,15 +42,15 @@ public class MainController {
     }
 
     @GetMapping("/profit/{id}/{nick}/{code}")
-    public ResponseEntity<MidasResponseDTO> getByApi(@PathVariable long id, @PathVariable String nick, @PathVariable Long code) {
+    public ResponseEntity<MidasResponseDTO> getByApi(@PathVariable long id, @PathVariable String nick, @PathVariable long code) {
         System.out.println("id: " + id + "\nnick: " + nick + "\ncode: " + code + "\n\n");
-        return ResponseUtil.checkAndGet(midasService.getFarmByParseMatch(id, nick, code));
+        return ResponseUtil.checkAndGet(midasService.getFarm(id, nick, code));
     }
 
     @GetMapping("/profit/{id}/{nick}/")
     public ResponseEntity<MidasResponseDTO> getByApi(@PathVariable long id, @PathVariable String nick) {
         System.out.println("id: " + id + "\nnick: " + nick + "\n\n");
-        return ResponseUtil.checkAndGet(midasService.getFarmByParseMatch(id, nick, null));
+        return ResponseUtil.checkAndGet(midasService.getFarm(id, nick, null));
     }
 
     @GetMapping(value = "/phrase", produces = "application/json;charset=UTF-8")
