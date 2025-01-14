@@ -54,7 +54,7 @@ public class MidasService {
     /**
      * Название мидаса в JSON-е Dota Open API.
      */
-    @Value("${midass.json.name}")
+    @Value("${midas.json.name}")
     private String midasJsonName;
 
     private final OpenDotaAPIClient openDotaAPIClient;
