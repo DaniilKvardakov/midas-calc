@@ -1,14 +1,15 @@
 package midas.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import midas.annotations.NoCommentsNeeded;
 
 /**
  * Перечисление статусов ответов.
  */
 @NoCommentsNeeded
+@Schema
 public enum Status {
-
 
     SUCCESS("Успешный подсчет."),
     INVALID_NICKNAME_ERROR("Неверный никнейм!"),
@@ -19,9 +20,6 @@ public enum Status {
     REPORT_BUG_ERROR("Критический сбой... Повторите попытку позже..."),
     NO_MIDAS_ERROR("У игрока с введенным предметом не было мидаса!"),
     MATCH_NOT_FOUND_OR_MATCH_ID_IS_INVALID_ERROR("Номер матча недействителен или не найден!");
-
-
-
 
     private final String message;
 

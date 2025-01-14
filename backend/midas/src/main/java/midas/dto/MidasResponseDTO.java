@@ -1,5 +1,7 @@
 package midas.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import midas.annotations.NoCommentsNeeded;
 import midas.models.MidasResponse;
 import midas.models.Status;
@@ -8,15 +10,23 @@ import midas.models.Status;
  * @see MidasResponse
  */
 @NoCommentsNeeded
+@Schema(description = "Сущность ответа.")
 public class MidasResponseDTO {
 
+    @Schema(description = "Статус ответа.")
     private Status status;
+    @Schema(description = "Краткое сообщение ответа, помогающее определить что нужно в случае неудачного запроса.")
     private String message;
-
+    @Schema(description = "Сколько раз был использован мидас за матч.")
     private Integer usesCounter;
+    @Schema(description = "Получено денег с помощью мидаса до конца матча.")
     private int profitUntilEnd;
+    @Schema(description = "Получено денег с помощью мидаса после его продажи.")
     private int profitAfterSale;
+    @Schema(description = "Окупился ли мидас.")
+    @JsonProperty("paidOf")
     private boolean isPaidOf;
+    @Schema(description = "Время в минутах, когда мидас окупился.")
     private Long timeOfPayback;
 
     @Override
