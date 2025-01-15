@@ -32,6 +32,8 @@ public class MainController {
 
     @Value("${url.swagger}")
     private String swaggerURL;
+    @Value("${url.original.swagger}")
+    private String originalSwaggerURL;
     private final MidasService midasService;
     private final PhraseService phraseService;
 
@@ -46,6 +48,12 @@ public class MainController {
     @GetMapping("/swagger")
     public RedirectView swagger() {
         return new RedirectView(swaggerURL);
+    }
+
+    @Hidden
+    @GetMapping("/swagger/original")
+    public RedirectView originalSwagger() {
+        return new RedirectView(originalSwaggerURL);
     }
 
     @Operation(
