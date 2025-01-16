@@ -1,18 +1,22 @@
+//@ts-nocheck
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
+import type {Ref} from "vue";
 import type {ICalculatorForm, ICalculatorTabProps, ICalculatorTabs} from "../../types/calculator.types.ts";
+
 
 export const useCalcStore = defineStore('calculator', () => {
     const result = ref(0);
     const formData = ref({});
+    const isButtonDisabled = ref(false);
+    const isSpinActive = ref(false);
+    const isShowResult = ref(false);
+    const sendedData = ref({})
+
     const calcTabs: ICalculatorTabs = [
         {
             id: 0,
-            title: "Id матча",
-        },
-        {
-            id: 1,
-            title: "Ввод вручную",
+            title: "Введите данные",
         },
     ];
 
@@ -22,15 +26,20 @@ export const useCalcStore = defineStore('calculator', () => {
         return currentTab.value.title === "Ввод вручную";
     })
 
-    const changeFormData = ({ name, value }) => {
+    const changeFormData = ({ name, value } : { name: string, value: string }) => {
         formData.value[name] = value;
     }
 
     const sendCalcForm = async () => {
-            const requestUrl = isShowInputs.value ? "/byData" : `/byId/${formData.value.matchId}`;
-
+        const baseUrl = 'http://176.212.127.212:8888';
+        const friendCodeUrl = formData.value.friendCode ? `?friendCode=${formData.value.friendCode}` : ''
+        const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}${friendCodeUrl}`;
+            //@ts-ignore
             const config = {
-                method: isShowInputs.value ? "POST" : "GET",
+                header: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                method: "GET",
             }
 
             if(isShowInputs.value) {
@@ -38,11 +47,35 @@ export const useCalcStore = defineStore('calculator', () => {
             }
 
             try {
-                const response = await fetch(requestUrl, config);
-                console.log('Возвращаем новые данные')
+                isButtonDisabled.value = true;
+                isSpinActive.value = true;
+                isShowResult.value = false;
+                const response = await fetch(baseUrl + requestUrl, config);
+                const responseJSON = await response.json();
+                console.log(responseJSON.status, responseJSON.paidOf, 'responseJSON.paidOf')
+                if(responseJSON.status === "SUCCESS" && !responseJSON.paidOf) {
+                    sendedData.value = {
+                        message:
+                            `Мидас не окупился.<br>Кол-во использований - ${responseJSON.usesCounter} <br>
+                        Окупился бы на ~${responseJSON.timeOfPayback} минуте`,
+                        status: 'ERROR',
+                    }
+                    return;
+                }
+
+                sendedData.value = {
+                    ...responseJSON
+                }
             } catch(e) {
                 console.error(e);
+                sendedData.value = {
+                    message: 'Возникла непредвиденная ошибка',
+                    status: 'ERROR',
+                }
             } finally {
+                isShowResult.value = true;
+                isButtonDisabled.value = false;
+                isSpinActive.value = false;
                 console.log('Последние штрихи, убираем будущий прелоадер')
             }
     }
@@ -50,41 +83,36 @@ export const useCalcStore = defineStore('calculator', () => {
     const convertDataToRequest = () => {
         const convertedFormData = new FormData();
 
-        for(let item in formData.value) {
-            convertedFormData.append(item, formData.value[item]);
-        }
+        convertedFormData.append('totalTimeOfMatch', formData.value.totalTimeOfMatch)
+        convertedFormData.append('midasTime', formData.value.midasTime)
+        convertedFormData.append('timeOfSellMidas', formData.value.timeOfSellMidas)
+        convertedFormData.append('wastedTime', 'PT10M')
 
         return convertedFormData;
     }
 
 
     const firstConfig: ICalculatorForm = {
+        result: 0,
         inputsConfig: [
             {
-                title: 'ID матча',
-                name: 'test',
-                type: 'input',
+                title: 'Время окончания матча',
+                name: 'totalTimeOfMatch',
+                type: 'time',
                 defaultVal: '',
                 required: true,
             },
             {
-                title: 'ID матча',
-                name: 'test2',
-                type: 'input',
+                title: 'Время покупки Мидаса',
+                name: 'midasTime',
+                type: 'time',
                 defaultVal: '',
                 required: true,
             },
             {
-                title: 'ID матча',
-                name: 'test3',
-                type: 'input',
-                defaultVal: '',
-                required: true,
-            },
-            {
-                title: 'ID матча',
-                name: 'test4',
-                type: 'input',
+                title: 'Время продажи Мидаса',
+                name: 'timeOfSellMidas',
+                type: 'time',
                 defaultVal: '',
                 required: true,
             },
@@ -92,6 +120,7 @@ export const useCalcStore = defineStore('calculator', () => {
     }
 
     const secondConfig: ICalculatorForm = {
+        result: 0,
         inputsConfig: [
             {
                 title: 'ID матча',
@@ -99,18 +128,29 @@ export const useCalcStore = defineStore('calculator', () => {
                 type: 'input',
                 defaultVal: '',
                 required: true,
+            },
+            {
+                title: 'Никнейм',
+                name: 'nickname',
+                type: 'input',
+                defaultVal: '',
+                required: true,
+            },
+            {
+                title: 'Код дружбы(не обязательно)',
+                name: 'friendCode',
+                type: 'input',
+                defaultVal: '',
+                required: false,
             }
         ]
     }
 
-
     const changeTabHandler = (tab: ICalculatorTabProps) => {
         currentTab.value = tab;
+        sendedData.value = {};
+        isShowResult.value = false;
     }
 
-
-
-
-
-    return { result, formData, changeFormData, currentTab, firstConfig, secondConfig, changeTabHandler, isShowInputs, sendCalcForm, calcTabs}
+    return { result, formData, changeFormData, currentTab, firstConfig, secondConfig, changeTabHandler, isShowInputs, sendCalcForm, calcTabs, isButtonDisabled, isSpinActive, isShowResult, sendedData}
 })

@@ -1,27 +1,35 @@
 <script setup lang="ts">
+import {ref, onUnmounted} from "vue";
 import type {ICalculatorForm} from "../types/calculator.types.ts";
 import CalculatorInput from "./CalculatorInput.vue";
 import CalculatorButton from "./CalculatorButton.vue";
 import {useCalcStore} from "../store/calculator";
+import CalculatorTime from "./CalculatorTime.vue";
+import CalculatorResult from "./CalculatorResult.vue";
 
-const props = defineProps<ICalculatorForm>();
+const {inputsConfig} = defineProps<ICalculatorForm>();
 const store = useCalcStore();
 const emit = defineEmits(['submit']);
+const form = ref(null);
 
 const onSubmit = () => {
   emit('submit')
 }
 
-const inputHandler = (val) => {
+const inputHandler = (val: {name: string, value: string}) => {
   store.changeFormData(val);
 }
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit" :class="$style.CalculatorForm">
+  <form ref="form" @submit.prevent="onSubmit" :class="$style.CalculatorForm">
       <div :class="$style.CalculatorInputWrap">
-        <CalculatorInput v-for="input in inputsConfig" :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
+        <template v-for="input in inputsConfig">
+          <CalculatorTime v-if="input.type === 'time'" :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
+          <CalculatorInput v-else :title="input.title" :name="input.name" :type="input.type" :default-val="input.defaultVal" :required="input.required" @input="inputHandler" />
+        </template>
       </div>
+      <CalculatorResult :is-show-result="store.isShowResult"></CalculatorResult>
       <CalculatorButton :style="{marginTop: 'auto'}">
         Отправить
       </CalculatorButton>
@@ -42,7 +50,12 @@ const inputHandler = (val) => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px 40px;
-  margin: auto;
+  margin: 0 0 20px;
   min-height: 106px;
+  width: 100%;
+
+  @media(max-width: 480px) {
+    grid-template-columns: 1fr ;
+  }
 }
 </style>

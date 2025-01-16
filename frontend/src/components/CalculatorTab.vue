@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type {ICalculatorTabProps} from "../types/calculator.types.ts";
 
-const props = defineProps<ICalculatorTabProps>();
+const { title } = defineProps<ICalculatorTabProps>();
 
 </script>
 
 <template>
-  <div :class="$style.CalculatorTab">
+  <h4 :class="$style.CalculatorTab">
     {{ title }}
-  </div>
+  </h4>
 </template>
 
 <style module>

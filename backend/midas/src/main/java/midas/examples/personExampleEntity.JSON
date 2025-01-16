@@ -1,0 +1,245 @@
+{
+  "purchase_log": [
+    {
+      "time": -89,
+      "key": "quelling_blade"
+    },
+    {
+      "time": -89,
+      "key": "tango"
+    },
+    {
+      "time": -89,
+      "key": "branches"
+    },
+    {
+      "time": -89,
+      "key": "branches"
+    },
+    {
+      "time": -89,
+      "key": "branches"
+    },
+    {
+      "time": -6,
+      "key": "orb_of_venom"
+    },
+    {
+      "time": 141,
+      "key": "gloves"
+    },
+    {
+      "time": 235,
+      "key": "ring_of_health"
+    },
+    {
+      "time": 327,
+      "key": "boots"
+    },
+    {
+      "time": 521,
+      "key": "hand_of_midas"
+    }
+  ],
+  "kills_log": [
+    {
+      "time": 191,
+      "key": "npc_dota_hero_treant"
+    },
+    {
+      "time": 2196,
+      "key": "npc_dota_hero_treant"
+    }
+  ],
+  "buyback_log": [],
+  "runes_log": [
+    {
+      "time": 0,
+      "key": 5
+    },
+    {
+      "time": 1934,
+      "key": 1
+    }
+  ],
+  "connection_log": [],
+  "lane_pos": {
+    "126": {
+      "124": 1
+    }
+  },
+  "obs": {},
+  "sen": {},
+  "actions": {
+    "1": 9783,
+    "2": 27,
+    "4": 6624
+  },
+  "purchase": {
+    "quelling_blade": 1,
+    "tango": 1,
+    "branches": 3
+  },
+  "gold_reasons": {
+    "0": 600,
+    "1": -3515,
+    "6": 1300
+  },
+  "xp_reasons": {
+    "0": 132,
+    "1": 12993,
+    "2": 19378,
+    "3": 290
+  },
+  "killed": {
+    "npc_dota_creep_badguys_ranged": 3,
+    "npc_dota_creep_goodguys_melee": 85,
+    "npc_dota_creep_badguys_melee": 11,
+  },
+  "item_uses": {
+    "branches": 2,
+    "tango": 3,
+    "tpscroll": 11,
+    "hand_of_midas": 16,
+  },
+  "ability_uses": {
+    "monkey_king_boundless_strike": 52,
+    "monkey_king_mischief": 16,
+  },
+  "ability_targets": {},
+  "damage_targets": {
+    "monkey_king_boundless_strike": {
+      "npc_dota_hero_razor": 1286,
+      "npc_dota_hero_treant": 1192,
+    },
+    "null": {
+      "npc_dota_hero_treant": 5590,
+      "npc_dota_hero_phantom_lancer": 3308,
+    },
+    "orb_of_venom": {
+      "npc_dota_hero_treant": 69,
+      "npc_dota_hero_phantom_lancer": 77,
+    },
+    "monkey_king_tree_dance": {
+      "npc_dota_hero_treant": 31,
+    },
+    "monkey_king_wukongs_command": {
+      "npc_dota_hero_phantom_lancer": 1585,
+      "npc_dota_hero_treant": 2968,
+    },
+    "maelstrom": {
+      "npc_dota_hero_obsidian_destroyer": 216,
+      "npc_dota_hero_razor": 401,
+      "npc_dota_hero_treant": 148
+    },
+    "ancient_apparition_ice_blast": {
+      "npc_dota_hero_obsidian_destroyer": 315
+    },
+    "gungir": {
+      "npc_dota_hero_treant": 1836,
+      "npc_dota_hero_phantom_lancer": 1424,
+      "npc_dota_hero_razor": 1683,
+      "npc_dota_hero_obsidian_destroyer": 552
+    }
+  },
+  "hero_hits": {
+    "monkey_king_boundless_strike": 36,
+    "null": 173
+  },
+  "damage": {
+    "npc_dota_hero_razor": 9040,
+    "npc_dota_hero_treant": 11834,
+    "npc_dota_creep_badguys_ranged": 397
+  },
+  "damage_taken": {
+    "npc_dota_hero_treant": 8023,
+    "npc_dota_creep_goodguys_melee": 692
+  },
+  "damage_inflictor": {
+    "monkey_king_boundless_strike": 5601,
+    "null": 16838
+  },
+  "runes": {
+    "1": 1,
+    "5": 1
+  },
+  "killed_by": {
+    "npc_dota_hero_treant": 2
+  },
+  "kill_streaks": {
+    "3": 2
+  },
+  "multi_kills": {
+    "2": 1
+  },
+  "life_state": {
+    "0": 2327,
+    "1": 38,
+    "2": 509
+  },
+  "healing": {
+    "npc_dota_hero_monkey_king": 10281
+  },
+  "damage_inflictor_received": {
+    "null": 8359,
+    "orb_of_venom": 27
+  },
+  "randomed": false,
+  "pred_vict": false,
+  "neutral_tokens_log": [
+    {
+      "time": 1127,
+      "key": "Tier2Token"
+    }
+  ],
+  "account_id": 1105660044,
+  "party_id": 3,
+  "permanent_buffs": [],
+  "party_size": 3,
+  "team_number": 1,
+  "team_slot": 0,
+  "hero_id": 114,
+  "hero_variant": 1,
+  "item_0": 242,
+  "item_1": 1466,
+  "item_2": 174,
+  "item_3": 116,
+  "item_4": 214,
+  "gold": 1894,
+  "gold_spent": 24865,
+  "ability_upgrades_arr": [
+    5716,
+    5723
+  ],
+  "personaname": "Sex metal designer",
+  "name": null,
+  "last_login": "2022-09-13T18:19:50.478Z",
+  "rank_tier": 23,
+  "is_subscriber": false,
+  "radiant_win": true,
+
+  "purchase_time": {
+    "quelling_blade": -89,
+    "tango": -89
+  },
+
+  "first_purchase_time": {
+    "quelling_blade": -89,
+    "tango": -89
+  },
+  "item_win": {
+    "quelling_blade": 0
+  },
+  "item_usage": {
+    "quelling_blade": 1,
+    "tango": 1
+  },
+  "actions_per_min": 359,
+  "life_state_dead": 547,
+  "benchmarks": {
+    "gold_per_min": {
+      "raw": 583,
+      "pct": 0.6702241195304163
+    }
+  }
+}

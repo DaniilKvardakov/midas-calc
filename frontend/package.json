@@ -4,19 +4,25 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "dev": "vavite serve",
+    "build": "vavite build",
+    "start": "node dist/server"
   },
   "dependencies": {
     "pinia": "^2.3.0",
+    "express": "^4.21.1",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^18.19.67",
     "@vue/tsconfig": "^0.7.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "~5.6.2",
     "vite": "^6.0.5",
+    "vavite": "5.1.0",
     "vue-tsc": "^2.2.0"
   }
 }

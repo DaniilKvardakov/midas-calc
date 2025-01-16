@@ -3,7 +3,7 @@ export interface ICalculatorTabProps {
     title: string;
 }
 
-export type ICalculatorTabs = CalculatorTabProps[];
+export type ICalculatorTabs = ICalculatorTabProps[];
 
 export interface ICalculatorForm {
     inputsConfig: IInput[],
@@ -13,7 +13,7 @@ export interface ICalculatorForm {
 export interface IInput {
     title: string;
     name: string;
-    type: 'input' | "checkbox";
+    type: 'input' | "checkbox" | "time";
     defaultVal?: string;
     required: boolean;
 }
