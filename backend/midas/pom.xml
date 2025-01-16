@@ -11,7 +11,7 @@
 	<groupId>midas</groupId>
 	<artifactId>midas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>midasCalc</name>
 	<description>calc farm with midas</description>
 	<url/>
