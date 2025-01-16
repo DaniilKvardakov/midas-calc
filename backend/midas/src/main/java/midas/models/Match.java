@@ -11,6 +11,17 @@ public class Match {
     @JsonProperty("players")
     private List<Player> players;
 
+    /**
+     * Метод проверяющий наличие "кастов" у игроков
+     * @return пропарсен ли матч.
+     */
+    public boolean isParsed() {
+        boolean status = false;
+        for (Player player : this.getPlayers())
+            status = !(player.getItemUses() == null);
+        return status;
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
@@ -21,8 +32,8 @@ public class Match {
 
     @Override
     public String toString() {
-        return "Match{" +
-                "players=" + players +
-                '}';
+        return "\nMatch {" +
+                "\n players = " + players +
+                "\n}";
     }
 }

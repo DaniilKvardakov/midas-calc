@@ -1,13 +1,13 @@
 package midas.models;
 
 import midas.annotations.Commented;
-import org.springframework.context.annotation.PropertySource;
+
+import java.time.Duration;
 
 /**
  * Сущность ответа при запросе.
  */
 @Commented
-@PropertySource("classpath:secret/midas.properties")
 public class MidasResponse {
 
     /**
@@ -15,7 +15,7 @@ public class MidasResponse {
      */
     public static final MidasResponse BAD_MIDAS_RESPONSE = new MidasResponse();
     /**
-     * Статус ответа к запросы с клиента.
+     * Статус ответа к запросам с клиента.
      */
     private Status status;
     /**
@@ -35,22 +35,15 @@ public class MidasResponse {
      */
     private long profitAfterSale;
     /**
-     * Окупился ли мидас.
+     * Окупился ли Мидас.
      */
     private Boolean isPaidOf;
     /**
-     * Время когда мидас окупил себя.
+     * Время когда мидас окупил/окупил бы себя(без учета продажи).
      */
     private Long timeOfPayback; // In minutes.
 
-    private MidasResponse() {
-    }
-
-    public MidasResponse(long profitUntilEnd, long profitAfterSale, Long timeOfPayback) {
-        this.profitUntilEnd = profitUntilEnd;
-        this.profitAfterSale = profitAfterSale;
-        this.timeOfPayback = timeOfPayback;
-    }
+    private MidasResponse() { }
 
     public MidasResponse(Integer usesCounter, long profitUntilEnd, long profitAfterSale, Long timeOfPayback, Boolean isPaidOf) {
         this.usesCounter = usesCounter;
@@ -68,6 +61,23 @@ public class MidasResponse {
                 ", \nisPaidOf=" + isPaidOf +
                 ", \ntimeOfPayback=" + timeOfPayback +
                 "\n}";
+    }
+
+    /**
+     * Метод считающий время, когда мидас окупился/окупился бы на основе времени его покупки.
+     * Метод считает БЕЗ УЧЕТА ПРОДАЖИ!
+     * @param midasTime время покупки мидаса.
+     * @return время когда мидас окупился.
+     * @see Duration
+     */
+    public static Duration getTimeOfPayback(Duration midasTime, int midasPrice) {
+        int priceBuffer = 0;
+        Duration durationBuffer = midasTime;
+        while (priceBuffer < midasPrice) {
+            durationBuffer = durationBuffer.plus(Duration.ofSeconds(110));
+            priceBuffer += 160;
+        }
+        return durationBuffer;
     }
 
     /**

@@ -1,4 +1,4 @@
-package midas.security;
+package midas.configurations;
 
 import midas.annotations.NoCommentsNeeded;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @NoCommentsNeeded
 @Configuration
 @EnableWebSecurity
-public class SecurityCfg {
+public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

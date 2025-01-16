@@ -1,21 +1,25 @@
 package midas.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import midas.annotations.NoCommentsNeeded;
 
 /**
  * Перечисление статусов ответов.
  */
 @NoCommentsNeeded
+@Schema
 public enum Status {
+
     SUCCESS("Успешный подсчет."),
     INVALID_NICKNAME_ERROR("Неверный никнейм!"),
-    CLOSE_DOTA_PROFILE_ERROR("Закрыта история матчей в Dota! Сделайте матчи в настройках Dota общедоступными!"),
-    DOTA_API_ERROR("Непредвиденная ошибка! Повторите попытку позже..."),
     DEFECTIVE_DOTA_MATCH("Матч либо очень старый, либо поврежден на стороне VALVE!"),
-    CRITICAL_FAILURE("Критический сбой... Мы уже решаем проблему!"),
-    NEED_FRIEND_CODE_ERROR("Повторите запрос, добавив код дружбы.");
-
+    NEED_FRIEND_CODE_ERROR("Обнаружено несколько игроков с введенным никнеймом! Повторите запрос, добавив код дружбы."),
+    MATCH_NOT_ANALYZED_ERROR("Не получилось проанализировать матч. Повторите попытку позже..."),
+    CHECK_STATUS_PARSING_ERROR("Критический сбой... Мы уже решаем проблему!"),
+    REPORT_BUG_ERROR("Критический сбой... Повторите попытку позже..."),
+    NO_MIDAS_ERROR("У игрока с введенным предметом не было мидаса!"),
+    MATCH_NOT_FOUND_OR_MATCH_ID_IS_INVALID_ERROR("Номер матча недействителен или не найден!");
 
     private final String message;
 

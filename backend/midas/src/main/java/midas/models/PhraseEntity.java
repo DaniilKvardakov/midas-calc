@@ -1,5 +1,7 @@
 package midas.models;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import midas.annotations.Commented;
 
 import java.util.List;
@@ -8,19 +10,26 @@ import java.util.List;
  * Сущность фраз(о мидасе) героев.
  */
 @Commented
+@Schema
 public class PhraseEntity {
 
     /**
      * Имя героя.
      */
+    @Schema(description = "Имя героя")
     private String nameOfHero;
     /**
      * Путь к иконке героя.
      */
+    @Schema(description = "Путь к файлу с иконкой.")
     private String rootToImg;
     /**
      * Список фраз героя.
      */
+    @ArraySchema(
+            schema = @Schema(description = "Фраза героя."),
+            arraySchema = @Schema(description = "Список фраз героя.")
+    )
     private List<String> phrases;
 
     public PhraseEntity(String nameOfHero, String rootToImg, List<String> phrases) {

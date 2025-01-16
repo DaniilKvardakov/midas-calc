@@ -26,4 +26,12 @@ public class SteamPlayer {
     public void setPersonaName(String personaName) {
         this.personaName = personaName;
     }
+
+    @Override
+    public String toString() {
+        return "SteamPlayer{" +
+                "steamID=" + steamID +
+                ", personaName='" + personaName + '\'' +
+                '}';
+    }
 }
