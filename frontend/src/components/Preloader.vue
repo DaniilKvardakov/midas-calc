@@ -24,6 +24,7 @@ const props = defineProps<IPreloader>();
   border-radius: 10px;
   //width: 100%;
   //padding: 0 15px;
+  z-index: 8;
 
   @media(max-width: 570px) {
     width: 100%;

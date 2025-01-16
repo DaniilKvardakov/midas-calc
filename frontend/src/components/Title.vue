@@ -33,7 +33,7 @@ h1, h2 {
   position: relative;
   padding: 0 15px;
   margin-top: 0;
-  z-index: 3;
+  z-index: 7;
   text-align: center;
 }
 </style>

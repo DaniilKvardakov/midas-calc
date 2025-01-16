@@ -32,13 +32,14 @@ export const useCalcStore = defineStore('calculator', () => {
 
     const sendCalcForm = async () => {
         const baseUrl = 'http://176.212.127.212:8888';
-            const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}/${formData.value.friendCode || ''}`;
+        const friendCodeUrl = formData.value.friendCode ? `?friendCode=${formData.value.friendCode}` : ''
+        const requestUrl = isShowInputs.value ? "/profit" : `/profit/${formData.value.matchId}/${formData.value.nickname}${friendCodeUrl}`;
             //@ts-ignore
             const config = {
                 header: {
                     'Access-Control-Allow-Origin': '*'
                 },
-                method: isShowInputs.value ? "POST" : "GET",
+                method: "GET",
             }
 
             if(isShowInputs.value) {
@@ -51,6 +52,16 @@ export const useCalcStore = defineStore('calculator', () => {
                 isShowResult.value = false;
                 const response = await fetch(baseUrl + requestUrl, config);
                 const responseJSON = await response.json();
+                console.log(responseJSON.status, responseJSON.paidOf, 'responseJSON.paidOf')
+                if(responseJSON.status === "SUCCESS" && !responseJSON.paidOf) {
+                    sendedData.value = {
+                        message:
+                            `Мидас не окупился.<br>Кол-во использований - ${responseJSON.usesCounter} <br>
+                        Окупился бы на ~${responseJSON.timeOfPayback} минуте`,
+                        status: 'ERROR',
+                    }
+                    return;
+                }
 
                 sendedData.value = {
                     ...responseJSON

@@ -20,49 +20,54 @@ const submitHandler = async () => {
   audio.value.play()
 };
 
+let activeImgIdx = 0;
 
-const images = reactive({
-  first: {
-    zIndex: 2,
+const images = ref([
+  {
+    class: 'FirstImg',
     opacity: 1,
+    active: true,
   },
-  second: {
-    zIndex: 1,
+  {
+    class: 'SecondImg',
     opacity: 0,
+    active: false,
   },
-  third: {
-    zIndex: 0,
+  {
+    class: 'ThirdImg',
     opacity: 0,
-  }
-})
-
-
+    active: false,
+  },
+  {
+    class: 'FourthImg',
+    opacity: 0,
+    active: false,
+  },
+  {
+    class: 'FifthImg',
+    opacity: 0,
+    active: false,
+  },
+])
 setInterval(() => {
-  if(currentImg.value === 0) {
-    currentImg.value = 1;
-    images.first.opacity = 0;
-    images.second.opacity = 1;
-    images.third.opacity = 0;
-  } else if(currentImg.value === 1) {
-    currentImg.value = 2;
-    images.first.opacity = 0;
-    images.second.opacity = 0;
-    images.third.opacity = 1;
-  } else if(currentImg.value === 2) {
-    currentImg.value = 0;
-    images.second.opacity = 0;
-    images.third.opacity = 0;
-    images.first.opacity = 1;
+  if(activeImgIdx === images.value.length - 1) {
+    images.value[activeImgIdx].opacity = 0;
+    images.value[0].opacity = 1;
+    activeImgIdx = 0;
+    return;
   }
+  images.value[activeImgIdx].opacity = 0;
+  images.value[activeImgIdx + 1].opacity = 1;
+  activeImgIdx += 1;
 }, 10000)
+
 
 </script>
 
 <template>
  <div :class="$style.Main">
-     <div :class="$style.MainImg" :style="images.first"></div>
-     <div :class="$style.SecondImg" :style="images.second"></div>
-     <div :class="$style.ThirdImg" :style="images.third"></div>
+     <div :class="[$style.MainImg, $style[img.class]]" v-for="(img, idx) in images" :style="{opacity: img.opacity, zIndex: idx}" />
+
      <div :class="$style.MainCover"></div>
 
      <Title type="h1" :style="{margin: ' 0 0 0.17em'}">Калькулятор Мидаса</Title>
@@ -109,10 +114,10 @@ setInterval(() => {
   width: 100%;
   height: 100%;
   opacity: .2;
-  z-index: 3;
+  z-index: 5;
 }
 
-.MainImg {
+.FirstImg {
   background: url('./assets/midasbg3.png'), var(--main-black);
 }
 
@@ -124,7 +129,15 @@ setInterval(() => {
   background: url('./assets/midasbg5.png'), var(--main-black);
 }
 
-.MainImg, .SecondImg, .ThirdImg {
+.FourthImg {
+  background: url('./assets/midasbg6.png'), var(--main-black);
+}
+
+.FifthImg {
+  background: url('./assets/midasbg7.png'), var(--main-black);
+}
+
+.MainImg {
   background-size: cover;
   background-repeat: no-repeat;
   height: 100%;

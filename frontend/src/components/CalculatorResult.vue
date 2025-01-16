@@ -8,7 +8,7 @@ interface ICalcResult {
 }
 const store = useCalcStore();
 const props = defineProps<ICalcResult>();
-const computedGold = computed(() => splitThousands(store.sendedData?.profitAfterSale))
+const computedGold = computed(() => splitThousands(store.sendedData?.profitAfterEnd))
 const isStatusSuccess = computed(() => store.sendedData?.status === 'SUCCESS')
 </script>
 
@@ -25,8 +25,7 @@ const isStatusSuccess = computed(() => store.sendedData?.status === 'SUCCESS')
     </template>
 
     <template v-else>
-      <div :class="$style.CalculatorResultError">
-          {{ store.sendedData?.message }}
+      <div :class="$style.CalculatorResultError" v-html="store.sendedData?.message">
       </div>
     </template>
   </div>
