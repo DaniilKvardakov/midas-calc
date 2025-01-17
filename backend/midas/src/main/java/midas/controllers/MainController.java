@@ -1,6 +1,5 @@
 package midas.controllers;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +10,6 @@ import midas.service.MidasService;
 import midas.service.PhraseService;
 import midas.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,20 +18,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
 @Tag(name = "Midas endpoints")
 @NoCommentsNeeded
 @RestController("/midas/api")
-@PropertySource("classpath:secret/redirect.properties")
 public class MainController {
 
-    @Value("${url.swagger}")
-    private String swaggerURL;
-    @Value("${url.original.swagger}")
-    private String originalSwaggerURL;
     private final MidasService midasService;
     private final PhraseService phraseService;
 
@@ -43,18 +35,6 @@ public class MainController {
         this.phraseService = phraseService;
     }
 
-
-    @Hidden
-    @GetMapping("/swagger")
-    public RedirectView swagger() {
-        return new RedirectView(swaggerURL);
-    }
-
-    @Hidden
-    @GetMapping("/swagger/original")
-    public RedirectView originalSwagger() {
-        return new RedirectView(originalSwaggerURL);
-    }
 
     @Operation(
             summary = "Возвращает сущность ответа с полным результатом анализа на основе принимаемых данных. (id матча, имя игрока, код дружбы Steam)",
