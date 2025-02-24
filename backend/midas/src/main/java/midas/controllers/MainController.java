@@ -1,5 +1,6 @@
 package midas.controllers;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +11,6 @@ import midas.service.MidasService;
 import midas.service.PhraseService;
 import midas.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,6 @@ public class MainController {
         this.midasService = midasService;
         this.phraseService = phraseService;
     }
-
 
     @Operation(
             summary = "Возвращает сущность ответа с полным результатом анализа на основе принимаемых данных. (id матча, имя игрока, код дружбы Steam)",
